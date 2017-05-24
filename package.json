@@ -1,0 +1,28 @@
+{
+  "name": "rajinsalatyuk",
+  "version": "0.0.1",
+  "description": "rajin shalat",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ingelieur/rajinsalatyuk.git"
+  },
+  "author": "ingelieur,zulfikarannur,hakiemaul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ingelieur/rajinsalatyuk/issues"
+  },
+  "homepage": "https://github.com/ingelieur/rajinsalatyuk#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cron": "^1.2.1",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "mongoose": "^4.10.2",
+    "nodemon": "^1.11.0",
+    "twit": "^2.2.5"
+  }
+}
