@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const schedulerController = require('../controllers/schedulerTweet')
 const searchTweet = require('../controllers/searchTweet')
 
@@ -7,6 +8,6 @@ const searchTweet = require('../controllers/searchTweet')
 router.get('/',schedulerController.allCity)
 
 // Search and reply tweet
-router.get('/', searchTweet.replyTweet)
+router.get('/reply', searchTweet.replyTweet)
 
 module.exports = router;

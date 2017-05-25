@@ -1,18 +1,23 @@
 //Init express and body parser
 const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
-const app = express()
 const env = require('dotenv').config();
 
-//Declare route const
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/rajinsalatyuk');
+
 const index = require('./routes/index');
+const users = require('./routes/users');
+const locations = require('./routes/locations');
+const locationusers = require('./routes/locationusers');
 
-//Body parser
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended : false}))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended : false}));
 
-//Routing
-app.use('/',index)
+app.use('/', index);
+app.use('/users', users);
+app.use('/locations', locations);
+app.use('/locationusers', locationusers);
 
-//Listening to port 3000
-app.listen(3000)
+app.listen(3000);
