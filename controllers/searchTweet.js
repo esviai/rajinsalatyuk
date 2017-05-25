@@ -30,6 +30,7 @@ var searchTweet = function(since) {
   if(since) {
     T.get('search/tweets', { q: `#rajinsalatyuk since_id:${since}`})
     .then(result => {
+      console.log(result.data.statuses.length)
       result.data.statuses.forEach(data => {
         let status = {}
 
@@ -99,7 +100,7 @@ var defaultTweet = function(content) {
 }
 
 var execute = function(req, res, send) {
-  setInterval(latestTweet, 10000)
+  setInterval(latestTweet, 60000)
 }
 
 execute()
