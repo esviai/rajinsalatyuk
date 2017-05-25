@@ -1,6 +1,8 @@
+//Init express and body parser
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const env = require('dotenv').config();
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/rajinsalatyuk');
