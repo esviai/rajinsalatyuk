@@ -17,17 +17,39 @@ var updateOrCreate = ((req,res) => {
       // if user is found
       if (resUser) {
         resUser.count += 1;
-
         // check whether user already has the location
         if (resUser.locations.includes(locationName)) {
           resUser.save((err, updatedUser) => {
-            res.send(err ? err: `User is updated`);
+            location.findOne({name:locationName}, (err, resLocation) => {
+              resLocation.count += 1;
+              resLocation.save((err, updatedLoc) => {
+                res.send(err ? err : `User and location are updated`);
+              });
+            });
           });
         }
         else {
           resUser.locations.push(locationName);
           resUser.save((err, updatedUser) => {
-            res.send(err ? err: `User is updated`);
+            location.findOne({name:locationName}, (err, resLocation) => {
+              if(resLocation) {
+                resLocation.count += 1;
+                resLocation.users.push(username);
+                resLocation.save((err, updatedLoc) => {
+                  res.send(err ? err : `User and location are updated`);
+                });
+              }
+              else {
+                let newLocation = new location({
+                  name: locationName,
+                  count: 1,
+                  users: username
+                });
+                newLocation.save((err, createdLoc) => {
+                  res.send(err ? err : `User is updated and location is created`);
+                });
+              }
+            });
           });
         }
       }
@@ -49,10 +71,10 @@ var updateOrCreate = ((req,res) => {
 
               // check whether location has the username
               //if (!resLocation.users.includes(username)) {
-                resLocation.users.push(username);
-                resLocation.save((err, updatedLoc) => {
-                  res.send(err ? err : `User is created and location is updated`);
-                });
+              resLocation.users.push(username);
+              resLocation.save((err, updatedLoc) => {
+                res.send(err ? err : `User is created and location is updated`);
+              });
               //}
               //else {
               //  resLocation.save((err, updatedLoc) => {
@@ -80,6 +102,15 @@ var updateOrCreate = ((req,res) => {
   });
 });
 
+var getLocations = ((req,res) => {
+  let id = req.params.id;
+  user.findById(id, (err, user) => {
+    let locations = user.locations.join(', ');
+    res.send(`@${user.username} telah pergi ke ${locations} selama bulan Ramadan.`);
+  });
+});
+
 module.exports = {
-  updateOrCreate
+  updateOrCreate,
+  getLocations
 };
