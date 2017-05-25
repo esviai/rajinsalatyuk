@@ -21,7 +21,7 @@ timeout_ms:60*1000,  // optional HTTP request timeout to apply to all requests.
 
 const allCity = function(req, res) {
   res.send('Bismillah')
-  let cities = ['Jakarta', 'Jayapura', 'Makassar', 'Banjarmasin', 'Medan'];
+  let cities = ['Banda Aceh','Medan','Pekanbaru','Batam','Palembang','Pangkal Pinang', 'Jambi', 'Bengkulu', 'Padang', 'Bandar Lampung', 'Serang', 'Jakarta', 'Bandung', 'Semarang','Yogyakarta','Surabaya','Pontianak','Palangkaraya'];
   cities.forEach(city => {
     dailyScheduler(city)
   })
@@ -30,7 +30,7 @@ const allCity = function(req, res) {
 const dailyScheduler = function(city) {
   console.log("Masuk Scheduler");
   // var timePattern = `* * * * * *`
-  new CronJob(`00 32 19 * * * `, function() {
+  new CronJob(`00 27 20 * * * `, function() {
     getJSON(`http://muslimsalat.com/${city}/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6`, function(error, response){
      if (response) {
        var salatTime = []
