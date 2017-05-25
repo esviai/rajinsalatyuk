@@ -16,48 +16,58 @@ var T = new Twit({
 var latestTweet = function() {
   T.get('statuses/user_timeline', { count: 1 }, function(err, data) {
     if(err) console.log(err)
-    let latest_tweet_id = data[0].id;
+    if(data[0]) {
+      var latest_tweet_id = data[0].id;
+    } else {
+      var latest_tweet_id = false;
+    }
     console.log('Searching tweet')
     searchTweet(latest_tweet_id)
   })
 }
 
 var searchTweet = function(since) {
-  T.get('search/tweets', { q: `#rajinsalatyuk since_id:${since}`})
-  .then(result => {
-    result.data.statuses.forEach(data => {
-      let status = {}
+  if(since) {
+    T.get('search/tweets', { q: `#rajinsalatyuk since_id:${since}`})
+    .then(result => {
+      result.data.statuses.forEach(data => {
+        let status = {}
 
-      status.username = data.user.screen_name;
-      status.status_id = data.id_str;
+        status.username = data.user.screen_name;
+        status.status_id = data.id_str;
 
-      let context = data.text;
-      context = context.split(',')
-      let completeURL = `${url}${context[0]}${end}`
-      context[1] = context[1].trim();
-      let request = context[1].split(' ');
-      let time = util.requestGen(request[0])
-      if(time) status.specific = time;
-      getJSON(completeURL, function(err, response) {
-        status.time = response.items;
-        status.place = response.query;
-        if(status.time == undefined) {
-          defaultTweet(status)
-        } else {
-          status.time = status.time[0];
-          if(status.specific == undefined) {
-            replyAll(status)
-          } else {
-            replyOne(status)
-          }
+        let context = data.text;
+        context = context.split(',')
+        let completeURL = `${url}${context[0]}${end}`
+        if(context[1]) {
+          context[1] = context[1].trim();
+          let request = context[1].split(' ');
+          var time = util.requestGen(request[0])
         }
+        if(time) status.specific = time;
+        getJSON(completeURL, function(err, response) {
+          if(response) {
+            status.time = response.items;
+            status.place = response.query;
+          }
+          if(status.time == undefined) {
+            defaultTweet(status)
+          } else {
+            status.time = status.time[0];
+            if(status.specific == undefined) {
+              replyAll(status)
+            } else {
+              replyOne(status)
+            }
+          }
+        })
       })
+      if(!result) console.log('No #rajinsalatyuk tweet detected')
     })
-    if(!result) console.log('No #rajinsalatyuk tweet detected')
-  })
-  .catch(err => {
-    console.log(err)
-  })
+    .catch(err => {
+      console.log(err)
+    })
+  }
 }
 
 var replyAll = function(content) {
@@ -91,6 +101,8 @@ var defaultTweet = function(content) {
 var execute = function(req, res, send) {
   setInterval(latestTweet, 10000)
 }
+
+execute()
 
 module.exports = {
   execute
