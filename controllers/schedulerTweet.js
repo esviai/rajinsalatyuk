@@ -1,7 +1,7 @@
 const CronJob = require('cron').CronJob;
 const Twit = require('twit');
 const getJSON = require('get-json')
-
+const util = require('../helpers/util')
 
 var T = new Twit({
 consumer_key:process.env.CONSUMER_KEY, //consumer key
@@ -11,44 +11,69 @@ access_token_secret:process.env.ACCESS_TOKEN_SECRET, //test user secret
 timeout_ms:60*1000,  // optional HTTP request timeout to apply to all requests.
 })
 
-const Tweeter = function() {
-  T.post('statuses/update', { status: ``},
-    function(err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(data);
-      }
+// const dailyScheduler = function(req, res) {
+//   getJSON('http://muslimsalat.com/Jakarta/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6', function(err, response) {
+//     if(err) console.log(err);
+//     let prayerData = {};
+//
+//   })
+// }
+
+const allCity = function(req, res) {
+  res.send('Bismillah')
+  let cities = ['Jakarta', 'Jayapura', 'Makassar', 'Banjarmasin', 'Medan'];
+  cities.forEach(city => {
+    dailyScheduler(city)
   })
 }
 
-
-
-const Scheduler = function(req,res) {
+const dailyScheduler = function(city) {
   console.log("Masuk Scheduler");
-  var timePattern = `05 * * * * *`
-  new CronJob(timePattern, function() {
-    getJSON('http://muslimsalat.com/Jakarta/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6', function(error, response){
+  // var timePattern = `* * * * * *`
+  new CronJob(`00 32 19 * * * `, function() {
+    getJSON(`http://muslimsalat.com/${city}/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6`, function(error, response){
      if (response) {
        var salatTime = []
-       let fajr = response.items[0].fajr.split("").
-       let dhuhr = response.items[0].dhuhr.split("")
-       let asr = response.items[0].asr.split("")
-       let maghrib = response.items[0].maghrib.split("")
-       let isha = response.items[0].isha.split("")
-       console.log(fajr,dhuhr,asr,maghrib,isha);
-      //  console.log(salatTime.push().push().push().push().push());
+       var fajr = util.patternMaker(response.items[0].fajr, 1)
+       var dhuhr = util.patternMaker(response.items[0].dhuhr)
+       var asr = util.patternMaker(response.items[0].asr)
+       var maghrib = util.patternMaker(response.items[0].maghrib)
+       var isha = util.patternMaker(response.items[0].isha)
+       salatTime.push(fajr, dhuhr, asr, maghrib, isha)
+       console.log(salatTime);
+       salatName = ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+       salatTime.forEach(timePattern => {
+         let name = salatName[0];
+         Tweeter(timePattern, name, city);
+         salatName.shift();
+       })
      } else {
        console.log(error)
      }
     })
     console.log("Jalan");
   } ,
-  function() {
-  } ,true)
-  res.send("Bismillah")
+  null
+  ,true)
+}
+
+const Tweeter = function(timePattern, name, city) {
+  console.log("Masuk Tweeter");
+  console.log(timePattern);
+  new CronJob(timePattern, function () {
+    console.log("Cron JOb Created");
+    T.post('statuses/update', { status: `Waktu sholat ${name} untuk wilayah ${city} dan sekitarnya`},
+      function(err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(data);
+        }
+    })
+    this.stop()
+  }, null ,true)
 }
 
 module.exports = {
-  Scheduler
+  allCity
 };
