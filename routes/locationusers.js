@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const crud = require('../controllers/locationuserCrud');
 
-router.get('/', (req,res) => {
-  res.send('Alive');
-})
+router.post('/', crud.updateOrCreate);
 
 module.exports = router;
