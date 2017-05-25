@@ -14,6 +14,12 @@ var createUser = ((req,res) => {
   });
 });
 
+var getUsers = (() => {
+  user.find((err,users) => {
+    return users;
+  });
+});
+
 var showUsers = ((req,res) => {
   user.find((err,users) => {
     res.send(err ? err : users);
@@ -43,6 +49,7 @@ var deleteUser = ((req,res) => {
 
 module.exports = {
   createUser,
+  getUsers,
   showUsers,
   showUser,
   updateUser,
