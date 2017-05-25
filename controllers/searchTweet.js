@@ -1,7 +1,8 @@
+const url =  `http://muslimsalat.com/`
+const end = `/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6`
 require('dotenv').config();
 var Twit = require('twit')
-let url =  `http://muslimsalat.com/`
-let end = `/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6`
+var getJSON = require('get-json')
 
 var T = new Twit({
   consumer_key:process.env.CONSUMER_KEY,
@@ -13,6 +14,7 @@ var T = new Twit({
 var latestTweet = function() {
   T.get('statuses/user_timeline', { count: 1 })
   .then(result => {
+    console.log('Searching for tweet')
     let latest_tweet_id = result.data[0].id
     searchTweet(latest_tweet_id)
   })
@@ -21,37 +23,47 @@ var latestTweet = function() {
 var searchTweet = function(since) {
   T.get('search/tweets', { q: `#rajinsalatyuk since_id:${since}`})
   .then(result => {
-    let statuses = []
     result.data.statuses.forEach(data => {
+      let status = {}
+
+      status.username = data.user.screen_name;
+      status.status_id = data.id_str;
+
       let context = data.text;
       context = context.split(',')
-      let complete = `${url}${context[0]}${end}`
+      let completeURL = `${url}${context[0]}${end}`
+      let request = context[1]
 
+      getJSON(completeURL, function(err, response) {
+        status.time = response.items;
+        status.place = response.query;
+        if(status.time == undefined) {
+          defaultTweet(status)
+        } else {
+          status.time = status.time[0];
+          replyTweet(status)
+        }
+      })
     })
-    console.log(statuses)
   })
 }
 
-var replyTweet = function(username, status_id) {
-  T.post('statuses/update', { status: `@${username} coba ini!`, in_reply_to_status_id: status_id }, function(err, data) {
+var replyTweet = function(content) {
+  let hasil = `subuh ${content.time.fajr} zuhur ${content.time.dhuhr} ashar ${content.time.asr} maghrib ${content.time.maghrib} isha ${content.time.isha}`
+  T.post('statuses/update', { status: `@${content.username} Waktu sholat di ${content.place}, ${hasil}!`, in_reply_to_status_id: content.status_id }, function(err, data) {
+    console.log('Reply data kepada user ' + content.username)
     console.log(data)
   })
 }
 
-var execute = function(req, res, send) {
-  latestTweet();
+var defaultTweet = function(content) {
+  T.post('statuses/update', { status: `@${content.username} Untuk mengetahui waktu sholat di tempatmu, tweet nama lokasi dengan #rajinsalatyuk!`, in_reply_to_status_id: content.status_id }, function(err, data) {
+    console.log('Reply default kepada user ' + content.username)
+  })
 }
 
-// replyTweet('hakiemaul')
+var execute = function(req, res, send) {
+  setInterval(latestTweet, 10000)
+}
 
-var getJSON = require('get-json')
-let location = "bandung"
-getJSON(`${url}${location}${end}`, function(error, response){
-
-    error
-    // undefined
-
-    console.log(response.items)
-
-})
-
+execute()
