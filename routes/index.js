@@ -11,7 +11,7 @@ const auth = require('../controllers/auth');
 router.get('/', schedulerController.allCity);
 
 router.get('/test', (req,res) => {
-  res.render('index');
+  res.render('index', { coba: false });
 });
 
 router.post('/test', getWaktuSalat.reply);

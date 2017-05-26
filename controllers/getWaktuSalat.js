@@ -6,7 +6,6 @@ const util = require('../helpers/util');
 
 var reply = ((req,res) => {
   let result = req.body.spokenRes;
-  console.log(result);
   let status = {};
 
   let arrResult = result.toLowerCase().split(" ");
@@ -22,10 +21,8 @@ var reply = ((req,res) => {
     //let request = context[1].split(' ');
     //var time = util.requestGen(request[0]);
     var time = util.requestGen(context[1]);
-    console.log(time);
   }
   if(time) status.specific = time;
-    console.log(status.specific);
 
   getJSON(completeURL, function(err, response) {
     if(response) {
@@ -47,7 +44,7 @@ var reply = ((req,res) => {
 });
 
 var defaultReply = ((content,res) => {
-  res.send(`Untuk mengetahui waktu salat di tempatmu, sebutkan nama kota dan waktu salat!`);
+  res.render('index', { coba: `Untuk mengetahui waktu salat di tempatmu, sebutkan nama kota dan waktu salat!` });
 });
 
 var replyAll = ((content,res) => {
@@ -59,13 +56,13 @@ var replyAll = ((content,res) => {
     isha: convertTime(content.time.isha)
   };
   let hasil = `subuh ${waktu.subuh} zuhur ${waktu.zuhur} ashar ${waktu.ashar} maghrib ${waktu.maghrib} isya ${waktu.isha}`;
-  res.send(`Waktu salat di ${content.place} adalah ${hasil} (waktu setempat)`);
+  res.render('index', { coba: `Waktu salat di ${content.place} adalah ${hasil} (waktu setempat)`});
 });
 
 var replyOne = ((content,res) => {
   let request = content.specific[1];
   let hasil = convertTime(content.time[request]);
-  res.send(`Waktu salat ${content.specific[0]} di ${content.place} adalah jam ${hasil} waktu setempat. Yuk salat!`);
+  res.render('index', { coba: `Waktu salat ${content.specific[0]} di ${content.place} adalah jam ${hasil} waktu setempat. Yuk salat!` });
 });
 
 module.exports = {
