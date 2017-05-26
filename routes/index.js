@@ -8,6 +8,10 @@ const lebaranTweet = require('../controllers/lebaranTweet');
 // Test cron
 router.get('/',schedulerController.allCity);
 
+router.get('/test', (req,res) => {
+  res.render('webspeechdemo');
+});
+
 // Search and reply tweet
 router.get('/reply', searchTweet.execute);
 
