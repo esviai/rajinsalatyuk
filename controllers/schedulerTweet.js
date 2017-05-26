@@ -30,7 +30,7 @@ const allCity = function(req, res) {
 const dailyScheduler = function(city) {
   console.log("Masuk Scheduler");
   // var timePattern = `* * * * * *`
-  new CronJob(`00 07 11 * * * `, function() {
+  new CronJob(`00 10 00 * * * `, function() {
     getJSON(`http://muslimsalat.com/${city}/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6`, function(error, response){
      if (response) {
        var salatTime = []
@@ -52,9 +52,7 @@ const dailyScheduler = function(city) {
      }
     })
     console.log("Jalan");
-  } ,
-  null
-  ,true)
+  } , null, true, 'Asia/Jakarta')
 }
 
 const Tweeter = function(timePattern, name, city) {
@@ -71,7 +69,7 @@ const Tweeter = function(timePattern, name, city) {
         }
     })
     this.stop()
-  }, null ,true)
+  }, null ,true, 'Asia/Jakarta')
 }
 
 module.exports = {
