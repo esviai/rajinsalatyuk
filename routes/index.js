@@ -10,11 +10,11 @@ const auth = require('../controllers/auth');
 // Test cron
 router.get('/', schedulerController.allCity);
 
-router.get('/test', (req,res) => {
+router.get('/waktusalat', (req,res) => {
   res.render('index', { coba: false });
 });
 
-router.post('/test', getWaktuSalat.reply);
+router.post('/waktusalat', getWaktuSalat.reply);
 
 // Search and reply tweet
 router.get('/reply', searchTweet.execute);
