@@ -89,6 +89,7 @@ var replyAll = function(content) {
 
 var replyOne = function(content) {
   let request = content.specific[1];
+  if(request == 'isha') content.specific[0] = 'isya'
   let hasil = convertTime(content.time[request]);
   T.post('statuses/update', { status: `@${content.username} Waktu salat ${content.specific[0]} di ${content.place} adalah jam ${hasil} waktu setempat. Yuk salat!`, in_reply_to_status_id: content.status_id }, function(err, data) {
     console.log('Reply specific data to user ' + content.username);
