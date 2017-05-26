@@ -3,6 +3,7 @@ const end = `/daily.json?key=654f798a989f8b5cffccd98ba5b0daa6`;
 const getJSON = require('get-json');
 const convertTime = require('convert-time');
 const util = require('../helpers/util');
+const ayat = require('../controllers/ayatRandomizer');
 
 var reply = ((req,res) => {
   let result = req.body.spokenRes;
@@ -44,7 +45,8 @@ var reply = ((req,res) => {
 });
 
 var defaultReply = ((content,res) => {
-  res.render('index', { coba: `Untuk mengetahui waktu salat di tempatmu, sebutkan nama kota dan waktu salat!` });
+  console.log(ayat.randomizer());
+  res.render('index', { coba: `Untuk mengetahui waktu salat di tempatmu, sebutkan nama kota dan waktu salat!`, ayat: ayat.randomizer() });
 });
 
 var replyAll = ((content,res) => {
@@ -56,13 +58,16 @@ var replyAll = ((content,res) => {
     isha: convertTime(content.time.isha)
   };
   let hasil = `subuh ${waktu.subuh} zuhur ${waktu.zuhur} ashar ${waktu.ashar} maghrib ${waktu.maghrib} isya ${waktu.isha}`;
-  res.render('index', { coba: `Waktu salat di ${content.place} adalah ${hasil} (waktu setempat)`});
+  console.log(ayat.randomizer());
+  res.render('index', { coba: `Waktu salat di ${content.place} adalah ${hasil} (waktu setempat)`, ayat: ayat.randomizer()});
 });
 
 var replyOne = ((content,res) => {
   let request = content.specific[1];
   let hasil = convertTime(content.time[request]);
-  res.render('index', { coba: `Waktu salat ${content.specific[0]} di ${content.place} adalah jam ${hasil} waktu setempat. Yuk salat!` });
+  // console.log(ayat.randomizer)
+  console.log(ayat.randomizer());
+  res.render('index', { coba: `Waktu salat ${content.specific[0]} di ${content.place} adalah jam ${hasil} waktu setempat. Yuk salat!`, ayat: ayat.randomizer() });
 });
 
 module.exports = {

@@ -30,26 +30,30 @@
           </div>
         <div class="row">
           <div class="col s8">
-            <section>
-                <p class="output"><em>nama kota dan waktu shalat</em></p>
-            </section>
-            <form action="" method = "post">
-              <input id = "spokenRes" name = "spokenRes" type="" value ="" placeholder = "Please Speak!" hidden>
-              <input class="btn-large center"type = "submit" value = "Submit">
-            </form>
-            <% if(coba) { %>
-            <p><%- coba %></p>
-            <% }%>
-          </div>
-          <div class="col s4">
-            <a class="twitter-timeline" href="https://twitter.com/rajinsalatyuk" data-width="300" data-height="300">Tweets by rajinsalatyuk</a>
+              <section>
+                  <p class="output"><em>nama kota dan waktu shalat</em></p>
+              </section>
+              <form action="" method = "post">
+                <input id = "spokenRes" name = "spokenRes" type="" value ="" placeholder = "Please Speak!" hidden>
+                <input class="btn-large center"type = "submit" value = "Submit">
+              </form>
+              <% if(coba) { %>
+              <p><%- coba %></p>
+              <% }%>
+            </div>
+            <div class="col s4">
+              <a class="twitter-timeline" href="https://twitter.com/rajinsalatyuk" data-width="300" data-height="300">Tweets by rajinsalatyuk</a>
+            </div>
+            <div class="col s12">
+              <% if(ayat) { %>
+                <p><%= ayat.translation %></p>
+              <% } %>
+            </div>
           </div>
         </div>
-
-        </div>
-       <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
     <script src="./script.js"></script>
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
   </body>
 </html>
