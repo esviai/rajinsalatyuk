@@ -1,10 +1,10 @@
 const getJSON = require('get-json')
 
-var randomizer = function() {
+var randomizer = function(callback) {
   let random = Math.floor(Math.random() * 6236) + 1;
   let url = `http://api.alquran.cloud/ayah/${random}/en.asad`
   let url1 = `http://api.alquran.cloud/ayah/${random}`
-  let result = {};
+  var result = {};
   getJSON(url, (err, response) => {
     if(response) {
       result.translation = response.data.text;
@@ -12,7 +12,7 @@ var randomizer = function() {
         result.ayat = response.data.text;
         result.surat = response.data.surah.englishName;
         result.ayatOrder = response.data.numberInSurah;
-        return result;
+        callback(result)
       })
     }
   })
