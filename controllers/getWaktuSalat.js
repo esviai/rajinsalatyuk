@@ -46,8 +46,8 @@ var reply = ((req,res) => {
 
 var defaultReply = ((content,res) => {
   ayat.randomizer(function(ayat) {
-    res.render('index', { coba: `Untuk mengetahui waktu salat di tempatmu, sebutkan nama kota dan waktu salat!`, ayat: ayat });
-  })
+    res.render('waktuSalat', { coba: `Untuk mengetahui waktu salat di tempatmu, sebutkan nama kota dan waktu salat!`, ayat: ayat });
+  });
 });
 
 var replyAll = ((content,res) => {
@@ -60,16 +60,16 @@ var replyAll = ((content,res) => {
   };
   let hasil = `subuh ${waktu.subuh} zuhur ${waktu.zuhur} ashar ${waktu.ashar} maghrib ${waktu.maghrib} isya ${waktu.isha}`;
   ayat.randomizer(function(ayat) {
-    res.render('index', { coba: `Waktu salat di ${content.place} adalah ${hasil} (waktu setempat)`, ayat: ayat });
-  })
+    res.render('waktuSalat', { coba: `Waktu salat di ${content.place} adalah ${hasil} (waktu setempat)`, ayat: ayat });
+  });
 });
 
 var replyOne = ((content,res) => {
   let request = content.specific[1];
   let hasil = convertTime(content.time[request]);
   ayat.randomizer(function(ayat) {
-    res.render('index', { coba: `Waktu salat ${content.specific[0]} di ${content.place} adalah jam ${hasil} waktu setempat. Yuk salat!`, ayat: ayat });
-  })
+    res.render('waktuSalat', { coba: `Waktu salat ${content.specific[0]} di ${content.place} adalah jam ${hasil} waktu setempat. Yuk salat!`, ayat: ayat });
+  });
 });
 
 module.exports = {

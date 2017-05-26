@@ -33,7 +33,7 @@ var adminOnly = function(req, res, next) {
 
   if(token) {
     jwt.verify(token, sec, (err, decoded) => {
-      if(decoded.username == 'rajinsalatyuk') {
+      if(decoded.username == 'salat') {
         next()
       } else {
         res.send('Route only for admin')
@@ -43,6 +43,14 @@ var adminOnly = function(req, res, next) {
     res.send('Not logged in')
   }
 }
+
+//bcrypt.hash("pangkalsabar",saltRounds, (err,hash) => {
+//let newAdmin = new admin ({
+//  username: "salat",
+//  password: hash
+//});
+//newAdmin.save();
+//});
 
 module.exports = {
   adminLogin, adminOnly
